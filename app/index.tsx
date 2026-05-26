@@ -8,7 +8,7 @@ export default function HomeSceen() {
   const router = useRouter();
   const { decks, deleteDeck, setCurrentDeck } = useFlashcardStore();
   return (
-    <SafeAreaView className="flex-1 bg-gray-950">
+    <SafeAreaView className="flex-1 bg-black">
       <View className="px-4 pt-6 pb-4 flex-row items-center justify-between">
         <View>
           <Text className="text-white text-3xl font-bold">My Decks</Text>
