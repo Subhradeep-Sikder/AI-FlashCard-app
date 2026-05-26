@@ -42,3 +42,8 @@ app-example
 # generated native folders
 /ios
 /android
+
+# IDEs and local tool configs
+.vscode/
+.idea/
+.antigravitycli/

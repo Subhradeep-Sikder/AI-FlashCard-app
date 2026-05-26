@@ -1,5 +1,5 @@
 {
-  "name": "aiflash--app",
+  "name": "ai-flashcards",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {

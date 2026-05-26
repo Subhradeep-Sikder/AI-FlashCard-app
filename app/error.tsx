@@ -13,7 +13,7 @@ export default function ErrorScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-900 items-center justify-center px-8">
+    <SafeAreaView className="flex-1 bg-black items-center justify-center px-8">
       <Text className="text-6xl mb-6">😨</Text>
       <Text className="text-white text-2xl font-bold text-center mb-3">
         Something went wrong

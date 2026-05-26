@@ -1,50 +1,83 @@
-# Welcome to your Expo app 👋
+# AI Flashcard App 🧠
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+An AI-powered mobile flashcard generator built with **React Native (Expo)**, **TypeScript**, **Zustand**, and the **Gemini 1.5 Flash API**. 
 
-## Get started
+The app allows users to scan their handwritten study notes or textbook pages using their camera (or select from the photo gallery) and instantly generates detailed study flashcard decks customized to their choice of difficulty level.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 🚀 Key Features
 
-2. Start the app
+* **Scan Notes & Textbooks**: Use the device camera to take photos of study materials or import pictures from your gallery.
+* **Instant AI Generation**: Converts raw image text into structured flashcards using Gemini 1.5 Flash with custom prompt instructions.
+* **Three Study Difficulty Settings**:
+  * 🌱 **Simple**: Short & beginner-friendly questions and answers.
+  * 📖 **Detailed**: Thorough explanations for deep understanding.
+  * 🎯 **Exam Level**: Deep and challenging questions for exam preparation.
+* **Deck Management**: Automatically groups cards into subject-specific decks (e.g. Biology, History, Math) with persistent storage powered by `@react-native-async-storage/async-storage`.
+* **Interactive Study Mode**: Flip flashcards, test your memory, and mark cards as "Known" or "Need Review" to track progress.
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 🛠️ Technology Stack
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+* **Framework**: [Expo](https://expo.dev) (React Native v0.81.x) with Expo Router for file-based navigation.
+* **Programming Language**: TypeScript.
+* **State Management**: [Zustand](https://github.com/pmndrs/zustand) for fast, lightweight global state control.
+* **Styling**: [NativeWind](https://nativewind.dev) (Tailwind CSS for React Native).
+* **API Service**: [Gemini API](https://ai.google.dev/) via HTTP REST API (Axios).
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## 📂 Project Directory Structure
 
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+aiflash--app/
+├── app/                      # Expo Router Screens & Navigation Layout
+│   ├── _layout.tsx           # Application root layout & routing tree
+│   ├── index.tsx             # Home Screen (displays generated study decks)
+│   ├── camera.tsx            # Camera capture & photo selection screen
+│   ├── preview.tsx           # Image preview & difficulty configuration
+│   ├── generating.tsx        # Loading screen handling Gemini API requests
+│   ├── study.tsx             # Interactive flashcard study interface
+│   └── error.tsx             # Error fallback interface
+├── assets/                   # App icons, favicon, and splash screen graphics
+│   └── images/
+├── services/                 # External API integrations
+│   └── geminiApi.ts          # REST requests formatting raw images for Gemini API
+├── store/                    # Zustand Store
+│   └── flashcardStore.tsx    # State management for decks, selections, and AsyncStorage syncing
+├── types/                    # TypeScript Typings
+│   └── index.ts              # Data contracts for Decks, FlashCards, and Difficulties
+├── app.json                  # Expo configuration
+├── package.json              # Script definitions and dependency list
+├── tailwind.config.js        # TailwindCSS configuration for NativeWind
+└── tsconfig.json             # TypeScript configuration compiler options
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## ⚙️ Setup & Installation
 
-To learn more about developing your project with Expo, look at the following resources:
+### 1. Prerequisites
+Ensure you have **Node.js** (v18+) and **npm** installed on your machine.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 2. Install Dependencies
+Clone this repository, navigate to the folder, and run:
+```bash
+npm install
+```
 
-## Join the community
+### 3. Configure the Environment
+Create a `.env` file in the root directory and define your Google Gemini API Key:
+```env
+EXPO_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
+```
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### 4. Start the Application
+To run the project locally:
+```bash
+npm run start
+```
+* **Physical Device**: Download the **Expo Go** app on your physical iOS or Android device and scan the printed QR code.
+* **Android Emulator / iOS Simulator**: Press `a` or `i` in the terminal to launch the project inside your local emulator/simulator (requires local Android SDK / Xcode configuration).
