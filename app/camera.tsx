@@ -1,50 +1,59 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useFlashcardStore } from "@/store/flashcardStore";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
 export default function CameraScreen() {
   const router = useRouter();
-  const { setCurretImage } = useFlashcardStore();
+  const { setCurrentImage } = useFlashcardStore();
 
   const handleCamera = async () => {
-    const permission = await ImagePicker.requestCameraPermissionsAsync();
-    if (!permission.granted) {
-      Alert.alert(
-        "Permission needed",
-        "Please allow camera access to scan notes.",
-      );
-      return;
-    }
+    try {
+      const permission = await ImagePicker.requestCameraPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert(
+          "Permission needed",
+          "Please allow camera access to scan notes.",
+        );
+        return;
+      }
 
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: "images",
-      quality: 0.7,
-      base64: true,
-    });
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: "images",
+        quality: 0.7,
+        base64: true,
+      });
 
-    if (!result.canceled && result.assets[0].base64) {
-      setCurrentImage(result.assets[0].uri, result.assets[0].base64);
-      router.push("/preview");
+      if (!result.canceled && result.assets?.[0]?.base64) {
+        setCurrentImage(result.assets[0].uri, result.assets[0].base64);
+        router.push("/preview");
+      }
+    } catch (error: any) {
+      Alert.alert("Error", error.message || "Failed to open camera");
     }
   };
 
   const handleGallery = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) {
-      Alert.alert("Permission needed", "Please allow photo library access.");
-      return;
-    }
+    try {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert("Permission needed", "Please allow photo library access.");
+        return;
+      }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: "images",
-      quality: 0.7,
-      base64: true,
-    });
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: "images",
+        quality: 0.7,
+        base64: true,
+      });
 
-    if (!result.canceled && result.assets[0].base64) {
-      setCurrentImage(result.assets[0].uri, result.assets[0].base64);
+      if (!result.canceled && result.assets?.[0]?.base64) {
+        setCurrentImage(result.assets[0].uri, result.assets[0].base64);
+        router.push("/preview");
+      }
+    } catch (error: any) {
+      Alert.alert("Error", error.message || "Failed to open photo library");
     }
   };
 

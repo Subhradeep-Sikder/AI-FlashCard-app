@@ -3,8 +3,7 @@ import { Difficulty } from "@/types";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView } from "react-native-gesture-handler";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 
 const DIFFICULTIES: {
@@ -36,7 +35,7 @@ export default function PreviewScreen() {
   const handleGenerate = () => {
     router.push({
       pathname: "/generating",
-      parmas: { difficulty },
+      params: { difficulty },
     });
   };
 
@@ -53,7 +52,7 @@ export default function PreviewScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-black">
-      <ScrollView schowsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View className="flex-row items-center px-4 pt-4 pb-4">
           <TouchableOpacity
             onPress={() => router.back()}
