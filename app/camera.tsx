@@ -2,10 +2,52 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useFlashcardStore } from "@/store/flashcardStore";
 import { Text, TouchableOpacity, View } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 export default function CameraScreen() {
   const router = useRouter();
   const { setCurretImage } = useFlashcardStore();
+
+  const handleCamera = async () => {
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert(
+        "Permission needed",
+        "Please allow camera access to scan notes.",
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: "images",
+      quality: 0.7,
+      base64: true,
+    });
+
+    if (!result.canceled && result.assets[0].base64) {
+      setCurrentImage(result.assets[0].uri, result.assets[0].base64);
+      router.push("/preview");
+    }
+  };
+
+  const handleGallery = async () => {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert("Permission needed", "Please allow photo library access.");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: "images",
+      quality: 0.7,
+      base64: true,
+    });
+
+    if (!result.canceled && result.assets[0].base64) {
+      setCurrentImage(result.assets[0].uri, result.assets[0].base64);
+    }
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-black">
       <View className="flex-row items-center px-4 pt-4 pb-6 ">
@@ -30,11 +72,17 @@ export default function CameraScreen() {
       </View>
 
       <View className="px-6 pb-10 gap-4">
-        <TouchableOpacity className="bg-indigo-600 rounded-2xl py-4 items-center">
+        <TouchableOpacity
+          onPress={handleCamera}
+          className="bg-indigo-600 rounded-2xl py-4 items-center"
+        >
           <Text className="text-white text-lg font-bold">Open Camera</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="bg-gray-800 rounded-2xl py-4 items-center">
+        <TouchableOpacity
+          onPress={handleGallery}
+          className="bg-gray-800 rounded-2xl py-4 items-center"
+        >
           <Text className="text-white text-lg font-bold">
             Choose from galley
           </Text>

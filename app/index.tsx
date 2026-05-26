@@ -4,6 +4,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+
 export default function HomeSceen() {
   const router = useRouter();
   const { decks, deleteDeck, setCurrentDeck } = useFlashcardStore();
