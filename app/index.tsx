@@ -23,7 +23,7 @@ export default function HomeSceen() {
   const renderDeck = ({ item }: { item: Deck }) => {
     const known = item.cards.filter((c) => c.known).length;
     const total = item.cards.length;
-    const progress = total > 0 ? (known / 100) * 100 : 0;
+    const progress = total > 0 ? (known / total) * 100 : 0;
 
     const subjectColors: Record<string, string> = {
       Biology: "bg-green-900 text-green-300",

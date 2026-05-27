@@ -25,14 +25,17 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+*.log
 
-# macOS
+# OS files
 .DS_Store
+Thumbs.db
 *.pem
 
 # local env files
-.env*.local
 .env
+.env.*
+!.env.example
 
 # typescript
 *.tsbuildinfo
@@ -47,3 +50,4 @@ app-example
 .vscode/
 .idea/
 .antigravitycli/
+.claude/

@@ -71,7 +71,7 @@ export const useFlashcardStore = create<FlashcardState>((set, get) => ({
     set({ currentImageUri: uri, currentImageBase64: base64 }),
 
   updateCardKnown: async (deckId, cardId, known) => {
-    const { decks } = get();
+    const { decks, currentDeck } = get();
     const updated = decks.map((d) => {
       if (d.id !== deckId) return d;
       return {
@@ -79,8 +79,13 @@ export const useFlashcardStore = create<FlashcardState>((set, get) => ({
         cards: d.cards.map((c) => (c.id === cardId ? { ...c, known } : c)),
       };
     });
+
+    const updatedCurrentDeck = currentDeck && currentDeck.id === deckId
+      ? updated.find((d) => d.id === deckId) || null
+      : currentDeck;
+
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    set({ decks: updated });
+    set({ decks: updated, currentDeck: updatedCurrentDeck });
   },
 
   setLoading: (val) => set({ isLoading: val }),
