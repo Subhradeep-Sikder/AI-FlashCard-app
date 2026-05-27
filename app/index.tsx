@@ -1,13 +1,15 @@
 import { useFlashcardStore } from "@/store/flashcardStore";
 import { Deck } from "@/types";
 import { useRouter } from "expo-router";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Modal, Text, TouchableOpacity, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeSceen() {
   const router = useRouter();
   const { decks, deleteDeck, setCurrentDeck } = useFlashcardStore();
+  const [deckToDelete, setDeckToDelete] = useState<Deck | null>(null);
 
   const handleStudy = (deck: Deck) => {
     setCurrentDeck(deck);
@@ -15,14 +17,7 @@ export default function HomeSceen() {
   };
 
   const handleDelete = (deck: Deck) => {
-    Alert.alert("Delete Deck", `Delete "${deck.title}"?`, [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: () => deleteDeck(deck.id),
-      },
-    ]);
+    setDeckToDelete(deck);
   };
 
   const renderDeck = ({ item }: { item: Deck }) => {
@@ -135,7 +130,7 @@ export default function HomeSceen() {
             No decks yet!
           </Text>
           <Text className="text-gray-500 text-center leading-6">
-            Tap the + button below to scan your noyes and generate AI flashcards
+            Tap the + button below to scan your notes and generate AI flashcards
             instantly
           </Text>
         </View>
@@ -156,6 +151,67 @@ export default function HomeSceen() {
       >
         <Text className="text-white text-3xl font-light ">+</Text>
       </TouchableOpacity>
+
+      <Modal
+        visible={deckToDelete !== null}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setDeckToDelete(null)}
+      >
+        <View className="flex-1 bg-black/70 justify-center items-center px-6">
+          <View
+            className="bg-slate-900 border border-slate-800 rounded-3xl p-6 w-full items-center"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 10 },
+              shadowOpacity: 0.35,
+              shadowRadius: 20,
+              elevation: 10,
+            }}
+          >
+            <Text className="text-4xl mb-4">🗑️</Text>
+            
+            <Text className="text-white text-xl font-bold text-center mb-2">
+              Delete Deck
+            </Text>
+            
+            <Text className="text-gray-400 text-center mb-6 text-sm leading-5">
+              Are you sure you want to delete <Text className="text-white font-semibold">{"\""}{deckToDelete?.title}{"\""}</Text>? This action cannot be undone.
+            </Text>
+            
+            <View className="flex-row gap-4 w-full">
+              <TouchableOpacity
+                onPress={() => setDeckToDelete(null)}
+                className="flex-1 bg-slate-800 py-3.5 rounded-2xl items-center border border-slate-700"
+              >
+                <Text className="text-gray-300 font-bold text-base">
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                onPress={async () => {
+                  if (deckToDelete) {
+                    await deleteDeck(deckToDelete.id);
+                    setDeckToDelete(null);
+                  }
+                }}
+                className="flex-1 bg-red-600 py-3.5 rounded-2xl items-center"
+                style={{
+                  shadowColor: "#ef4444",
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 8,
+                }}
+              >
+                <Text className="text-white font-bold text-base">
+                  Delete
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
