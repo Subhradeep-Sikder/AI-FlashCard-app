@@ -1,83 +1,114 @@
-# AI Flashcard App 🧠
+# AI Flashcard App 🧠⚡
 
-An AI-powered mobile flashcard generator built with **React Native (Expo)**, **TypeScript**, **Zustand**, and the **Gemini 1.5 Flash API**. 
+An AI-powered mobile flashcard generator built.
 
-The app allows users to scan their handwritten study notes or textbook pages using their camera (or select from the photo gallery) and instantly generates detailed study flashcard decks customized to their choice of difficulty level.
+The app allows users to scan handwritten notes or textbook pages using their camera (or pick from the gallery) and instantly generates study flashcard decks customized to their chosen difficulty.
 
 ---
 
-## 🚀 Key Features
+## 🖼️ UI Showcase
 
-* **Scan Notes & Textbooks**: Use the device camera to take photos of study materials or import pictures from your gallery.
-* **Instant AI Generation**: Converts raw image text into structured flashcards using Gemini 1.5 Flash with custom prompt instructions.
-* **Three Study Difficulty Settings**:
-  * 🌱 **Simple**: Short & beginner-friendly questions and answers.
-  * 📖 **Detailed**: Thorough explanations for deep understanding.
-  * 🎯 **Exam Level**: Deep and challenging questions for exam preparation.
-* **Deck Management**: Automatically groups cards into subject-specific decks (e.g. Biology, History, Math) with persistent storage powered by `@react-native-async-storage/async-storage`.
-* **Interactive Study Mode**: Flip flashcards, test your memory, and mark cards as "Known" or "Need Review" to track progress.
+![App UI Showcase](./assets/images/ui.png)
+
+---
+
+## 🚶‍♂️ User Guide
+
+1. 📸 **Scan:** Tap `+` to photograph study notes or pick an image from your gallery.
+2. ⚙️ **Select Difficulty:** Choose **Simple**, **Detailed**, or **Exam Level**.
+3. ✨ **Generate:** Tap **Generate Flashcards** to build your deck instantly using AI.
+4. 🧠 **Study:** Tap cards to flip, rate your recall (`Got It` / `Review Again`), and track your score.
 
 ---
 
 ## 🛠️ Technology Stack
 
-* **Framework**: [Expo](https://expo.dev) (React Native v0.81.x) with Expo Router for file-based navigation.
-* **Programming Language**: TypeScript.
-* **State Management**: [Zustand](https://github.com/pmndrs/zustand) for fast, lightweight global state control.
-* **Styling**: [NativeWind](https://nativewind.dev) (Tailwind CSS for React Native).
-* **API Service**: [Gemini API](https://ai.google.dev/) via HTTP REST API (Axios).
+* 📱 **Core Framework:** React Native & Expo (v54) with Expo Router
+* 🛡️ **Language:** TypeScript
+* 🧠 **State Engine:** Zustand (global store & action handlers)
+* 💾 **Caching:** AsyncStorage (persistent local cache)
+* 🎨 **UI & Styling:** NativeWind (Tailwind CSS) & Ionicons
+* 🤖 **AI Integration:** Gemini 2.5 Flash API (Axios REST + structured JSON schema)
 
 ---
 
-## 📂 Project Directory Structure
+## 📊 Data Flow
 
-```text
-aiflash--app/
-├── app/                      # Expo Router Screens & Navigation Layout
-│   ├── _layout.tsx           # Application root layout & routing tree
-│   ├── index.tsx             # Home Screen (displays generated study decks)
-│   ├── camera.tsx            # Camera capture & photo selection screen
-│   ├── preview.tsx           # Image preview & difficulty configuration
-│   ├── generating.tsx        # Loading screen handling Gemini API requests
-│   ├── study.tsx             # Interactive flashcard study interface
-│   └── error.tsx             # Error fallback interface
-├── assets/                   # App icons, favicon, and splash screen graphics
-│   └── images/
-├── services/                 # External API integrations
-│   └── geminiApi.ts          # REST requests formatting raw images for Gemini API
-├── store/                    # Zustand Store
-│   └── flashcardStore.tsx    # State management for decks, selections, and AsyncStorage syncing
-├── types/                    # TypeScript Typings
-│   └── index.ts              # Data contracts for Decks, FlashCards, and Difficulties
-├── app.json                  # Expo configuration
-├── package.json              # Script definitions and dependency list
-├── tailwind.config.js        # TailwindCSS configuration for NativeWind
-└── tsconfig.json             # TypeScript configuration compiler options
+```mermaid
+graph LR
+    Input[Input: Scanned Note] -->|Base64 Image| API(Gemini 2.5 API)
+    API -->|Structured JSON| Store[Zustand Store]
+    Store -->|Persist| Cache[(AsyncStorage)]
+    Store -->|Render UI| Output[Output: Interactive Cards]
 ```
+
+
 
 ---
 
-## ⚙️ Setup & Installation
+## 📂 File Structure
 
-### 1. Prerequisites
-Ensure you have **Node.js** (v18+) and **npm** installed on your machine.
+* 📂 **`app/`** — Application screens and routes:
+  * `_layout.tsx` — App entry, routing, and gesture handler wrapper
+  * `index.tsx` — Dashboard & study deck list (Home)
+  * `camera.tsx` — Camera scanner & gallery picker
+  * `preview.tsx` — Image preview & difficulty selector
+  * `generating.tsx` — Loader managing active API calls
+  * `study.tsx` — Flipcard study mode & performance results
+* 📂 **`services/`** — External integrations (`geminiApi.ts`)
+* 📂 **`store/`** — Zustand global state managers (`flashcardStore.tsx`)
+* 📂 **`types/`** — TypeScript interfaces and schemas
+* ⚙️ **`app.json`** — Native app settings, icons, and permissions
 
-### 2. Install Dependencies
-Clone this repository, navigate to the folder, and run:
-```bash
-npm install
-```
+---
 
-### 3. Configure the Environment
-Create a `.env` file in the root directory and define your Google Gemini API Key:
-```env
-EXPO_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
-```
+## 🚀 Local Setup
 
-### 4. Start the Application
-To run the project locally:
-```bash
-npm run start
-```
-* **Physical Device**: Download the **Expo Go** app on your physical iOS or Android device and scan the printed QR code.
-* **Android Emulator / iOS Simulator**: Press `a` or `i` in the terminal to launch the project inside your local emulator/simulator (requires local Android SDK / Xcode configuration).
+Follow these steps to configure and run the project locally on your machine:
+
+### 📋 Prerequisites
+* **Node.js** (v18 or higher recommended)
+* **npm** (bundled with Node.js)
+* **Git** installed on your command line
+* **Expo Go** app installed on your physical mobile device (iOS/Android)
+
+### ⚙️ Installation & Running
+
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/Subhradeep-Sikder/AI-FlashCard-app.git
+   cd AI-FlashCard-app
+   ```
+
+2. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment:**
+   Create a `.env` file in the root directory:
+   ```env
+   EXPO_PUBLIC_GEMINI_API_KEY=""
+   ```
+   *(Get a free key from [Google AI Studio](https://aistudio.google.com/))*
+
+4. **Launch Development Server:**
+   ```bash
+   npx expo start -c
+   ```
+
+5. **Scan & Play:**
+   * **Physical Phone:** Scan the QR code displayed in the terminal using your phone's camera (iOS) or the Expo Go app scanner (Android).
+   * **Emulators:** Press `i` for iOS Simulator or `a` for Android Emulator (requires local simulator environments).
+
+## 🔮 Future Improvements
+
+* 🔐 **User Authentication:** Secure user signup and login (e.g., Supabase Auth / Clerk ).
+* 🗄️ **Database Sync:** Connect a cloud database (Supabase / PostgreSQL {Prisma ORM }) to save and sync decks across devices.
+* 📄 **Document Uploads:** Support multi-page PDF imports and scanning.
+* 🗣️ **Audio Reader:** Integrate Text-to-Speech to read flashcards aloud.
+
+##
+
+Built with ❤️
+
