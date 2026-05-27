@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { useFlashcardStore } from "@/store/flashcardStore";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function CameraScreen() {
   const router = useRouter();
@@ -62,9 +63,16 @@ export default function CameraScreen() {
       <View className="flex-row items-center px-4 pt-4 pb-6 ">
         <TouchableOpacity
           onPress={() => router.back()}
-          className="w-10 h-10 rounded-full bg-gray-800 items-center justify-center mr-4"
+          className="w-11 h-11 rounded-2xl bg-slate-900 items-center justify-center mr-4 border border-slate-800"
+          style={{
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.15,
+            shadowRadius: 4,
+            elevation: 2,
+          }}
         >
-          <Text className="text-white text-lg text-center ">←</Text>
+          <Ionicons name="chevron-back" size={20} color="#ffffff" />
         </TouchableOpacity>
         <Text className="text-white text-xl font-bold">Scan Notes</Text>
       </View>

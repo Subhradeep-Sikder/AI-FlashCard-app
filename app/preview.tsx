@@ -5,6 +5,7 @@ import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
+import { Ionicons } from "@expo/vector-icons";
 
 const DIFFICULTIES: {
   key: Difficulty;
@@ -56,9 +57,16 @@ export default function PreviewScreen() {
         <View className="flex-row items-center px-4 pt-4 pb-4">
           <TouchableOpacity
             onPress={() => router.back()}
-            className="w-10 h-10 rounded-full bg-gray-800 items-center justify-center mr-4"
+            className="w-11 h-11 rounded-2xl bg-slate-900 items-center justify-center mr-4 border border-slate-800"
+            style={{
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.15,
+              shadowRadius: 4,
+              elevation: 2,
+            }}
           >
-            <Text className="text-white text-lg">←</Text>
+            <Ionicons name="chevron-back" size={20} color="#ffffff" />
           </TouchableOpacity>
           <Text className="text-white text-xl font-bold">Preview</Text>
         </View>

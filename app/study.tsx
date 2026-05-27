@@ -2,14 +2,15 @@ import { useFlashcardStore } from "@/store/flashcardStore";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
-    Animated,
-    Dimensions,
-    Pressable,
-    Text,
-    TouchableOpacity,
-    View,
+  Animated,
+  Dimensions,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
 
@@ -24,10 +25,10 @@ export default function StudyScreen() {
 
   if (!currentDeck) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-950 items-center justify-center">
-        <Text>No Deck selected</Text>
+      <SafeAreaView className="flex-1 bg-black items-center justify-center">
+        <Text className="text-white text-lg font-semibold">No Deck selected</Text>
         <TouchableOpacity onPress={() => router.replace("/")}>
-          <Text className="text-indigo-400 mt-4">Go Home</Text>
+          <Text className="text-indigo-400 mt-4 text-base font-semibold">Go Home</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -95,8 +96,8 @@ export default function StudyScreen() {
           : "Keep studying!";
 
     return (
-      <SafeAreaView className="flex-1 bg-gray-950 px-6">
-        <View className="flex-1 items-center justify-center">
+      <SafeAreaView className="flex-1 bg-black px-6">
+        <View className="flex-1 items-center justify-center w-full">
           <Text className="text-8xl mb-6">{emoji}</Text>
           <Text className="text-white text-3xl font-bold text-center mb-2">
             {message}
@@ -105,18 +106,19 @@ export default function StudyScreen() {
             You knew {finalKnown} out of {cards.length} cards
           </Text>
 
-          <View className="w-36 h-36 rounded-full bg-indigo-900 border-4 border-indigo-500 items-center justify-center">
+          <View className="w-36 h-36 rounded-full bg-indigo-950/60 border-4 border-indigo-500 items-center justify-center mb-8">
             <Text className="text-white text-4xl font-bold">{percent}%</Text>
-            <Text className="text-indigo-300 text-xs">score</Text>
+            <Text className="text-indigo-300 text-xs uppercase font-semibold">score</Text>
           </View>
 
-          <View className="w-full bg-gray-800 rounded-2xl p-5 mb-8 border-gray-200">
-            <View className="flex-row justify-between">
+          <View className="w-full bg-slate-900 rounded-3xl p-5 mb-8 border border-slate-800">
+            <View className="flex-row justify-between mb-2">
               <Text className="text-gray-400">Got it</Text>
               <Text className="text-green-400 font-bold">
                 {finalKnown} cards
               </Text>
             </View>
+            <View className="w-full h-px bg-slate-800 my-2" />
             <View className="flex-row justify-between">
               <Text className="text-gray-400">Review again</Text>
               <Text className="text-red-400 font-bold">
@@ -125,7 +127,7 @@ export default function StudyScreen() {
             </View>
           </View>
 
-          <View className="pb-8 gap-3">
+          <View className="w-full pb-8 gap-3">
             <TouchableOpacity
               onPress={() => {
                 setCurrentIndex(0);
@@ -148,7 +150,7 @@ export default function StudyScreen() {
 
             <TouchableOpacity
               onPress={() => router.replace("/")}
-              className="bg-gray-800 rounded-2xl py-4 items-center border border-gray-700"
+              className="bg-slate-900 rounded-2xl py-4 items-center border border-slate-800"
             >
               <Text className="text-white text-lg font-bold">
                 🏠 Back to Home
@@ -161,44 +163,54 @@ export default function StudyScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-950">
-      <View>
+    <SafeAreaView className="flex-1 bg-black">
+      <View className="flex-row items-center justify-between px-4 pt-4 pb-4">
         <TouchableOpacity
           onPress={() => router.replace("/")}
-          className="w-10 h-10 rounded-full bg-gray-800 items-center justify-center border border-gray-70"
+          className="w-11 h-11 rounded-2xl bg-slate-900 items-center justify-center border border-slate-800"
+          style={{
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.15,
+            shadowRadius: 4,
+            elevation: 2,
+          }}
         >
-          <Text className="text-white text-lg">←</Text>
+          <Ionicons name="chevron-back" size={20} color="#ffffff" />
         </TouchableOpacity>
-        <View className="items-center">
-          <Text className="text-white font-bold text-base">
+        <View className="items-center flex-1 mx-4">
+          <Text className="text-white font-bold text-lg text-center" numberOfLines={1}>
             {currentDeck?.title}
           </Text>
           <Text className="text-gray-500 text-xs">{currentDeck.subject}</Text>
         </View>
-        <View className="bg-indigo-950 border border-indigo-800 px-3 py-1 rounded-full">
+        <View className="bg-indigo-950 border border-indigo-850 px-3 py-1.5 rounded-full">
           <Text className="text-indigo-300 text-sm font-bold">
             {currentIndex + 1}/{cards.length}
           </Text>
         </View>
       </View>
 
-      <View className="mx-4 mt-3 bg-gray-800 rounded-full h-1.5 mb-2">
-        <View className="bg-indigo-500 rounded-full h-1.5" />
+      <View className="mx-4 mt-3 bg-slate-900 rounded-full h-1.5 mb-2">
+        <View
+          className="bg-indigo-500 rounded-full h-1.5"
+          style={{ width: `${progress}%` }}
+        />
       </View>
-      <Text className="text-center text-gray-600 text-xs mb-6">
+      <Text className="text-center text-gray-500 text-xs mb-6">
         {cards?.filter((c) => c.known).length} known so far
       </Text>
 
       <View className="flex-1 items-center justify-center px-4">
         {!isFlipped && (
-          <Text className="text-gray-600 text-sm mb-4">
-            Tap to reveal the answer
+          <Text className="text-gray-500 text-sm mb-4">
+            Tap card to reveal the answer
           </Text>
         )}
 
         <Pressable
           onPress={flipCard}
-          style={{ width: width - 32, height: 300 }}
+          style={{ width: width - 32, height: 380 }}
         >
           <Animated.View
             style={{
@@ -209,13 +221,22 @@ export default function StudyScreen() {
               height: "100%",
             }}
           >
-            <View className="flex-1 bg-gray-800 rounded-3xl p-8 intem-center justify-center border border-gray-700">
-              <View className="bg-indigo-900 border bordeer-800 px-4 py-1.5 rounded-full">
-                <Text className="text-indigo-300 text-xs font-bold tracking-widest">
+            <View
+              className="flex-1 bg-slate-900 rounded-3xl p-8 items-center justify-center border border-indigo-500/25"
+              style={{
+                shadowColor: "#6366f1",
+                shadowOffset: { width: 0, height: 12 },
+                shadowOpacity: 0.22,
+                shadowRadius: 24,
+                elevation: 8,
+              }}
+            >
+              <View className="bg-indigo-950/40 border border-indigo-500/30 px-5 py-1.5 rounded-full mb-8">
+                <Text className="text-indigo-300 text-xs font-semibold tracking-widest uppercase">
                   QUESTION
                 </Text>
               </View>
-              <Text className="text-white text-xl font-bold text-center leading-8">
+              <Text className="text-slate-100 text-[26px] font-bold text-center leading-10 px-2">
                 {currentCard?.question}
               </Text>
             </View>
@@ -230,14 +251,23 @@ export default function StudyScreen() {
               height: "100%",
             }}
           >
-            <View className="flex-1 bg-gray-800 rounded-3xl p-8 intem-center justify-center border border-gray-700">
-              <View className="bg-indigo-900 border bordeer-800 px-4 py-1.5 rounded-full">
-                <Text className="text-indigo-300 text-xs font-bold tracking-widest">
+            <View
+              className="flex-1 bg-slate-900 rounded-3xl p-8 items-center justify-center border border-purple-500/25"
+              style={{
+                shadowColor: "#a855f7",
+                shadowOffset: { width: 0, height: 12 },
+                shadowOpacity: 0.22,
+                shadowRadius: 24,
+                elevation: 8,
+              }}
+            >
+              <View className="bg-purple-950/40 border border-purple-500/30 px-5 py-1.5 rounded-full mb-8">
+                <Text className="text-purple-300 text-xs font-semibold tracking-widest uppercase">
                   ANSWER
                 </Text>
               </View>
-              <Text className="text-white text-xl font-bold text-center leading-8">
-                {currentCard?.question}
+              <Text className="text-slate-100 text-[26px] font-bold text-center leading-10 px-2">
+                {currentCard?.answer}
               </Text>
             </View>
           </Animated.View>
@@ -245,32 +275,33 @@ export default function StudyScreen() {
       </View>
 
       {isFlipped && (
-        <Animated.View>
+        <View className="flex-row gap-4 px-4 pb-8 pt-4">
           <TouchableOpacity
             onPress={() => handleNext(false)}
             activeOpacity={0.8}
-            className="flex-1 bg-gray-800 rounded-2xl py-5 items-center border-gray-700"
+            className="flex-1 bg-slate-900 rounded-2xl py-4 items-center border border-slate-800"
           >
-            <Text>🥺</Text>
-            <Text className="text-gray-300 font-bold text-sm">
+            <Text className="text-xl mb-1">🥺</Text>
+            <Text className="text-gray-400 font-bold text-sm">
               Review Again
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => handleNext(true)}
-            className="flex-1 bg-green-900 rounded-2xl py-5 items-center border border-green-200"
+            activeOpacity={0.8}
+            className="flex-1 bg-green-950 rounded-2xl py-4 items-center border border-green-900/80"
             style={{
               shadowColor: "#22c55e",
               shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
+              shadowOpacity: 0.2,
               shadowRadius: 8,
             }}
           >
-            <Text>☺️</Text>
-            <Text className="text-green-300 font-bold text-sm">Got It</Text>
+            <Text className="text-xl mb-1">☺️</Text>
+            <Text className="text-green-400 font-bold text-sm">Got It</Text>
           </TouchableOpacity>
-        </Animated.View>
+        </View>
       )}
     </SafeAreaView>
   );
