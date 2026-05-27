@@ -77,21 +77,19 @@ export default function GeneratingScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-900 items-center justify-center px-8">
-      <View>
-        <Text></Text>
-
+    <SafeAreaView className="flex-1 bg-black items-center justify-center px-8">
+      <View className="items-center">
         <ActivityIndicator size={"large"} color={"#6366f1"} className="mb-6" />
 
         <Text className="text-white text-2xl font-bold text-center mb-3">
-          AI Is working
+          AI is working
         </Text>
 
-        <Text className="text-indigo-400 text-base text-center">
+        <Text className="text-indigo-400 text-base text-center font-medium">
           {LOADING_MESSAGES[messageIndex]}
         </Text>
 
-        <Text className="text-gray-600 text-sm text-center mt-8">
+        <Text className="text-gray-500 text-sm text-center mt-8">
           This usually takes 10-20 seconds
         </Text>
       </View>
