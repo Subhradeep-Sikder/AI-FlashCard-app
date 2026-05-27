@@ -83,7 +83,82 @@ export default function StudyScreen() {
     }
   };
 
-  
+  if (finished) {
+    const finalKnown = cards.filter((c) => c.known).length;
+    const percent = Math.round((finalKnown / cards.length) * 100);
+    const emoji = percent >= 80 ? "🏆" : percent >= 50 ? "💪" : "📚";
+    const message =
+      percent >= 80
+        ? "Crushed it!"
+        : percent >= 50
+          ? "Good progress!"
+          : "Keep studying!";
+
+    return (
+      <SafeAreaView className="flex-1 bg-gray-950 px-6">
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-8xl mb-6">{emoji}</Text>
+          <Text className="text-white text-3xl font-bold text-center mb-2">
+            {message}
+          </Text>
+          <Text className="text-gray-400 text-center mb-10">
+            You knew {finalKnown} out of {cards.length} cards
+          </Text>
+
+          <View className="w-36 h-36 rounded-full bg-indigo-900 border-4 border-indigo-500 items-center justify-center">
+            <Text className="text-white text-4xl font-bold">{percent}%</Text>
+            <Text className="text-indigo-300 text-xs">score</Text>
+          </View>
+
+          <View className="w-full bg-gray-800 rounded-2xl p-5 mb-8 border-gray-200">
+            <View className="flex-row justify-between">
+              <Text className="text-gray-400">Got it</Text>
+              <Text className="text-green-400 font-bold">
+                {finalKnown} cards
+              </Text>
+            </View>
+            <View className="flex-row justify-between">
+              <Text className="text-gray-400">Review again</Text>
+              <Text className="text-red-400 font-bold">
+                {cards.length - finalKnown} cards
+              </Text>
+            </View>
+          </View>
+
+          <View className="pb-8 gap-3">
+            <TouchableOpacity
+              onPress={() => {
+                setCurrentIndex(0);
+                setFinished(false);
+                setIsFlipped(false);
+                flipAnim.setValue(0);
+              }}
+              className="bg-indigo-600 rounded-2xl py-4 items-center"
+              style={{
+                shadowColor: "#6366f1",
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.4,
+                shadowRadius: 10,
+              }}
+            >
+              <Text className="text-white text-lg font-bold">
+                🔄 Study Again
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => router.replace("/")}
+              className="bg-gray-800 rounded-2xl py-4 items-center border border-gray-700"
+            >
+              <Text className="text-white text-lg font-bold">
+                🏠 Back to Home
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-gray-950">
