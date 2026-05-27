@@ -1,8 +1,9 @@
 import { Difficulty, FlashCard } from "@/types";
 import axios from "axios";
 
-// Gemini API base URL using gemini-1.5-flash
-const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+// Gemini API base URL using gemini-2.5-flash
+const API_URL =
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 const DIFFICULTY_PROMPTS: Record<Difficulty, string> = {
   simple:
@@ -38,10 +39,10 @@ export async function generateFlashCards(
     );
   }
 
-  const mediaType = getMediaType(base64Image);
   const cleanBase64 = base64Image.includes(",")
     ? base64Image.split(",")[1]
     : base64Image;
+  const mediaType = getMediaType(cleanBase64);
 
   try {
     const response = await axios.post(
@@ -61,22 +62,32 @@ export async function generateFlashCards(
 ${DIFFICULTY_PROMPTS[difficulty]}
 
 Generate 5-8 flashcards from the content in this image.
-Also detect the subject (e.g. Biology, History, Math) and create a short deck title.
-
-Respond ONLY with a valid JSON object in this exact format, no markdown, no extra text:
-{
-  "title": "short deck title here",
-  "subject": "subject name here",
-  "cards": [
-    { "question": "question here", "answer": "answer here" }
-  ]
-}`,
+Also detect the subject (e.g. Biology, History, Math) and create a short deck title.`,
               },
             ],
           },
         ],
         generationConfig: {
           responseMimeType: "application/json",
+          responseSchema: {
+            type: "object",
+            properties: {
+              title: { type: "string" },
+              subject: { type: "string" },
+              cards: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    question: { type: "string" },
+                    answer: { type: "string" }
+                  },
+                  required: ["question", "answer"]
+                }
+              }
+            },
+            required: ["title", "subject", "cards"]
+          }
         },
       },
       {
@@ -91,13 +102,15 @@ Respond ONLY with a valid JSON object in this exact format, no markdown, no extr
       throw new Error("No response text content received from Gemini API.");
     }
 
-    const cleaned = rawText.trim();
+    let cleaned = rawText.trim();
+    if (cleaned.startsWith("```")) {
+      cleaned = cleaned.replace(/^```(?:json)?/, "").replace(/```$/, "").trim();
+    }
     return JSON.parse(cleaned);
   } catch (error: any) {
-    console.error(
-      "Error generating flashcards:",
-      error?.response?.data || error.message || error,
-    );
-    throw new Error("AI returned invalid response. please try again");
+    const errorMsg =
+      error?.response?.data?.error?.message || error.message || error;
+    console.error("Error generating flashcards:", errorMsg);
+    throw new Error(errorMsg);
   }
 }
