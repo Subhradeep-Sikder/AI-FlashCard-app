@@ -66,8 +66,8 @@ export default function PreviewScreen() {
         <View className="mx-4 rounded-2xl overflow-hidden mb-6">
           <Image
             source={{ uri: currentImageUri }}
-            className="w-full h-64"
-            resizeMode="cover"
+            style={{ width: "100%", height: 256 }}
+            contentFit="cover"
           />
           <View className="absolute bottom-3 right-3 bg-black/60 px-4 py-1 rounded-full">
             <Text className="text-white text-xs">Your Notes</Text>
